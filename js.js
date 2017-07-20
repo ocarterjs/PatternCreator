@@ -1,74 +1,48 @@
-	var svgNS = "http://www.w3.org/2000/svg"; 
-	var counter = 5; // defines where the snaking begins vertically, 0 is the start.
-	var i = -2000; // defines where the snaking begins horrizontally, 0 is the start.
-	var waves = 1; // for smooth and equal snaking, this number should be an integer.
-	var howManyShapes = 1000; // Make any pattern you like by changing this variable.
-	var increase = Math.PI * waves / howManyShapes;
-	var step = 50; // defines gradient.
-	var depth = 10000; // concerns the vertical length of the window the P's consume.
-	var colour = "red";
+var svgNS = "http://www.w3.org/2000/svg";
+var counter = 5; // Defines where the snaking begins vertically, 0 is the start.
+var i = -2000; // Defines where the snaking begins horrizontally, 0 is the start.
+var waves = 1; // For smooth and equal snaking, this number should be an integer.
+var howManyShapes = 1000; // Number of shapes.
+var increase = Math.PI * waves / howManyShapes;
+var step = 50; // Gradient.
+var depth = 10000; // Vertical length of the window that the SVG shape consumes.
+var switched = false; // has pattern reached end of window.
 
-	function changeRed(x)
-	{
-		x = "red"
-		return x;
+function changePattern(x){
+	var rand = Math.round(Math.random() * 1000);
+	x = rand;
+	howManyShapes = x;
+	return x;
+}
+
+function createShape(x, y){
+	var newShape = document.createElementNS(svgNS, "use"); // Creates shape using two parameters the schema and use.
+	var  xlinkns = "http://www.w3.org/1999/xlink"; // Xlinks is required for the setAttributeNS
+	newShape.setAttributeNS(xlinkns, "href", "#Shape"); // Takes the shape from the SVG tag.
+	newShape.setAttribute("x", x); // Takes in x parameter and sets x position.
+	newShape.setAttribute("y", y); // Takes in y parameter and sets y position.
+	newShape.setAttribute("transform","scale(0.1,0.2)"); // Provides a transformation defining size.
+	return newShape; // Returns the shape object.
+}
+
+// Main Function Called on Click.
+function myFunction(){
+	var svg = document.getElementsByTagName('svg')[0]; // Gets svg tag and stores in array.
+
+	if(switched){ // If switched (reached end of window) Alter the directional angle.
+		var x = i += ((-howManyShapes * step) / 100 ) * 1 ;
 	}
-
-
-	function changePattern(x)
-	{
-		var rand = Math.round(Math.random() * 1000);
-		x = rand;
-		howManyShapes = x;
-		return x;
-
-	}
-
-
-	var switched = false;
-
-	function createShape(x, y)
-	{
-		var newShape = document.createElementNS(svgNS, "use"); // creates shape using two parameters the schema and use.
-		var  xlinkns = "http://www.w3.org/1999/xlink"; // xlinks is required for the setAttributeNS
-		newShape.setAttributeNS(xlinkns, "href", "#Shape"); // takes the shape from the SVG tag.
-		newShape.setAttribute("fill", colour); 
-		newShape.setAttribute("x", x); // takes in x parameter and sets x position. 
-   		newShape.setAttribute("y", y); // takes in y parameter and sets y position.
-   		newShape.setAttribute("transform","scale(0.1,0.2)"); // provides a transformation defining size.
-    	return newShape; // returns the shape object.
-	}
-	
-
-	function myFunction()
-	{
-
-		var svg = document.getElementsByTagName('svg')[0]; // gets svg tag and stores in array.
-
-		
-			// to assume how the objects will be created and move through the program x and y position ned definition.
-  		 if(switched)
-  		 {
-  		 	var x = i += ((-howManyShapes * step) / 100 ) * 1 ;
-  		 }
-  		 else
-  		 	var x = i += ((howManyShapes * step) / 100 ) * 1 ; // x is initialised to 0 by i. 
-		  
-		  var y = (Math.abs( Math.sin( counter ) )*depth); // sin defines the type of curve.
-		  counter += increase;
-
-
-		  svg.appendChild(createShape(x,y)); // appends the x y co-ordinates in svg.
-
-			if((x /10)  > window.screen.availWidth)
-			{
-				switched = true;
-			}
-
-			if(x < -2000)
-			{
-				switched = false; 
-			}			
-
-		  setTimeout(myFunction,1); // runs my function every 10 miliseconds
-	}
+	else{
+		var x = i += ((howManyShapes * step) / 100 ) * 1 ; // X is initialised to 0 by i.
+		var y = (Math.abs( Math.sin( counter ) )*depth); // Sin/Cos/Tan defines the type of curve.
+		counter += increase;
+	 }
+	 svg.appendChild(createShape(x,y)); // Appends the x & y co-ordinates in svg.
+	 if((x /10)  > window.screen.availWidth){ // When the x value exceeds screenwidth available
+		 switched = true; // Change Direction.
+	 }
+	 if(x < -2000){ // Change the direction Back.
+		 switched = false;
+	 }
+	 setTimeout(myFunction,1); // Runs myFunction every 10 miliseconds
+}
