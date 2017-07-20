@@ -14,6 +14,9 @@ Sheet 5.
   
 # About The Code:
 I wanted to make my design snake across the screen. Initially I did not think of the code implications of this idea.
-When it came to writing the code I had realised this was a semi-difficult design. For I had to use Trigonometry to create the
-graphics you see in the html.
+
+When it came to writing the code I had realised this was a semi-difficult design. 
+
+For I had to use Trigonometry to create the graphics you see in the html.
+
 Having completed the exercise I added a button for the user to change their design (alters the numerics behind the Sin, Cos, Tan Waves).
